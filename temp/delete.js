@@ -1,7 +1,7 @@
 const Nightmare = require('nightmare')
 const nightmare = Nightmare({ 
-  show: true,
-  waitTimeout: 600000
+  show: false,
+  waitTimeout: 60000
 })
 
 nightmare

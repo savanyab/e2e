@@ -1,51 +1,83 @@
-const Nightmare = require('nightmare')
+const Nightmare = require('nightmare');
 const nightmare = Nightmare({
   show: true,
   waitTimeout: 600000
 })
+const expect = require('chai').expect;
 
-nightmare
-  .goto('https://demoapp.sandbox.aggreg8.hu')
-  .click('#share-account-button')
-  .wait('#username')
-  .type('#username', 'istvan.kadar.js@gmail.com')
-  .type('#password', 'asdf1234')
-  .click('#kc_input_button')
-  .wait('.mat-select-arrow')
-  .click('.mat-select-arrow')
-  .click('#mat-option-7')
-  .wait(2000)
-  .click('.mat-raised-button')
-  .wait('#username')
-  .type('#mainAccountNumber', 1103420034278)
-  .type('#username', 3535419)
-  .type('#password', 'London12')
-  .click('.bank-login-button') 
-  .wait('#sync-done-icon') 
-  .click('.bank-login-button') 
-  .wait('#account-list') 
-  .click('.mat-checkbox') 
-  .wait(3000)
-  .wait('#consentedAccounsBlock > div > div:nth-child(2) > div > button')
-  .click('#consentedAccounsBlock > div > div:nth-child(2) > div > button') 
-  .wait(3000)
-  .wait('#flex > button.right.mediumDesktopBtn.mat-raised-button > span') 
-  .click('#flex > button.right.mediumDesktopBtn.mat-raised-button > span')  
-  .wait("table[class=striped]")
-  .goto('https://ui.sandbox.aggreg8.hu')
-  .wait(2000)
-  .type('#username', 'istvan.kadar.js@gmail.com')
-  .type('#password', 'asdf1234')
-  .click('#kc_input_button')
-  .wait(2000)
-  .click('#mat-tab-content-0-0 > div > app-bank-access-consent-list-component > div > div.consent-list > div > div > div:nth-child(1) > div > mat-card > mat-card-content > div.subtitle > button > span > i')
-  .wait('#mat-tab-content-0-0 > div > app-edit-bank-access-consent-component > div > div > button.right.mat-raised-button > span')
-  .click('#mat-tab-content-0-0 > div > app-edit-bank-access-consent-component > div > div > button.right.mat-raised-button > span')
-  .wait(2000)
-  .click('#revokeBtn > span')
-  .wait('#mat-tab-content-0-0 > div > app-connect-new-bank-component > div > div > div.bottomButtons > button > span')
-  .end()
-  .then(console.log)
-  .catch(error => {
-    console.error('Search failed:', error)
+describe('e2e test', function () {
+  it('start the application', function () {
+    nightmare
+    .goto(config.BASE_URL)
+    .click(config.shareAccountButton)
+    .wait()
+      
+    expect(nightmare.url()).to.equal('https://auth.sandbox.aggreg8.hu/auth/realms/aggreg8/protocol/openid-connect/auth?client_id=demo_go$banks-non-aisp&redirect_uri=https://demoapp.sandbox.aggreg8.hu&state=ddb9364e-0333-41a9-8741-318f0fdf131b&nonce=a1c9a915-0d74-45f2-891f-25be8ac6c2e4&response_type=code');
+    done();
   })
+
+  it('user log in', function () {
+    nightmare
+    .type('#username', config.username)
+    .type('#password', config.password)
+    .click(config.loginButton)
+    .wait(config.dropdown) 
+  })
+
+  it('choose provider', function () {
+    nightmare
+    .click(config.dropdown)
+    .click(config.optionOTP) 
+    .wait()
+    .click(config.connectButton)
+    .wait()
+  })
+
+  it('netbank login', function () {
+    nightmare
+    .type('#mainAccountNumber', config.accountNumber)
+    .type('#username', config.bankUserID)
+    .type('#password', config.bankPassword)
+    .click(config.bankLoginButton) 
+    .wait(config.syncDone)
+  })
+
+  it('choose account to share', function () {
+    nightmare
+    .click(config.continueButton) 
+    .wait("input[type=checkbox]") 
+    //.click("input[type=checkbox]") // kipipálom a számlát
+    .wait(3000)
+    .click(config.shareButton) 
+    .wait(1000)
+    .wait(config.confirmBlock) 
+    .click(config.allowButton)  
+    .wait(config.transactionList)
+  })
+
+  it('go to clean up', function () {
+    nightmare
+    .goto(config.UI_URL)
+    .wait(2000)
+  })
+
+  it('log in', function () {
+    nightmare
+    .type('#username', config.username)
+    .type('#password', config.password)
+    .click(config.loginButton)
+    .wait(5000)
+  })
+
+  it('delete account', function (done) {
+    nightmare
+    .click(config.editModeButton)
+    .wait(config.deleteAccessButton)
+    .click(config.deleteAccessButton)
+    .wait(2000)
+    .click(config.revokeButton)
+    .wait()
+      done();
+  })
+})
+
