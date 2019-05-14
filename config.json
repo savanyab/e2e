@@ -1,5 +1,6 @@
 {
     "BASE_URL": "https://demoapp.sandbox.aggreg8.hu",
+    "login_url": "https://auth.sandbox.aggreg8.hu",
     "shareAccountButton": "#share-account-button",
     "username": "istvan.kadar.js@gmail.com",
     "password": "asdf1234",
