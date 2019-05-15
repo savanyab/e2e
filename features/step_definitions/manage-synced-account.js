@@ -76,6 +76,24 @@ When('he chooses his account to sync', { timeout: 300 * 1000 }, (done) => {
     .catch((err) => done(err));
 });
 
+When('he chooses his account to share', (done) => {
+  nightmare
+    .evaluate(()=> {
+      const checked = document.getElementsByTagName("INPUT")[2].getAttribute("aria-checked");
+      return checked;
+    })
+    .then((result)=> {
+        console.log(result);        
+        if (result == 'true') { 
+          done();
+        } else {
+          nightmare.click("input[type=checkbox]");
+          done();
+        }
+    })
+    .catch((err) => {console.log(err); done(err);})
+})
+
 
 
 When('he allows to share account', (done) => {
