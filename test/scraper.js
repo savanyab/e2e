@@ -6,7 +6,7 @@ const config = require('../config');
 describe('e2e test', function () {
   this.timeout(30000);
 
-  after(function(done) {
+  after(function (done) {
     nightmare.end().then(function () {
       done();
     });
@@ -121,6 +121,24 @@ describe('e2e test', function () {
       .catch((err) => done(err));
   });
 
+  it('should choose account', function(done) {
+    nightmare
+    .evaluate(()=> {
+      const checked = document.getElementsByTagName("INPUT")[2].getAttribute("aria-checked");
+      return checked;
+    })
+    .then((result)=> {
+        console.log(result);        
+        if (result == 'true') { 
+          done();
+        } else {
+          nightmare.click("input[type=checkbox]");
+          done();
+        }
+    })
+    .catch((err) => {console.log(err); done(err);})
+  })
+
   it('should allow to share chosen account', function (done) {
     nightmare
       .wait(1000)
@@ -179,11 +197,12 @@ describe('e2e test', function () {
 
   it('should delete account', function (done) {
     nightmare
-      .click('#mat-tab-content-0-0 > div > app-bank-access-consent-list-component > div > div.consent-list > div > div > div:nth-child(1) > div > mat-card > mat-card-content > div.subtitle > button > span > i')
-      .wait('#mat-tab-content-0-0 > div > app-edit-bank-access-consent-component > div > div > button.right.mat-raised-button > span')
-      .click('#mat-tab-content-0-0 > div > app-edit-bank-access-consent-component > div > div > button.right.mat-raised-button > span')
+      .wait(config.selectors.editModeButton)
+      .click(config.selectors.editModeButton)
+      .wait(config.selectors.deleteAccessButton)
+      .click(config.selectors.deleteAccessButton)
       .wait(2000)
-      .click('#revokeBtn > span')
+      .click(config.selectors.revokeButton)
       .wait(3000)
       .evaluate(() => {
         const editIcon = document.querySelector('#mat-tab-content-0-0 > div > app-bank-access-consent-list-component > div > div.consent-list > div > div > div:nth-child(1) > div > mat-card > mat-card-content > div.subtitle > button > span > i');
