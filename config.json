@@ -1,25 +1,31 @@
 {
-    "BASE_URL": "https://demoapp.sandbox.aggreg8.hu",
-    "login_url": "https://auth.sandbox.aggreg8.hu",
-    "shareAccountButton": "#share-account-button",
-    "username": "istvan.kadar.js@gmail.com",
-    "password": "asdf1234",
-    "loginButton": "#kc_input_button",
-    "dropdown": "mat-select[role=listbox]",
-    "optionOTP": "#mat-option-7",
-    "connectButton": "body > sync-ui > app-control-component > div:nth-child(1) > div > non-aisp-oidc-control-component > div > app-connect-new-bank-component > div > div > div.bottomButtons > button > span",
-    "accountNumber": "1103420034278",
-    "bankUserID": "3535419",
-    "bankPassword": "London12",
-    "bankLoginButton": "body > sync-ui > app-control-component > div:nth-child(1) > div > non-aisp-oidc-control-component > div > app-enter-credentials-component > div > div > div > form > button > span",
-    "syncDone": "#sync-done-icon",
-    "continueButton": "body > sync-ui > app-control-component > div:nth-child(1) > div > non-aisp-oidc-control-component > div > app-sync-bank-access-consent-component > div > div > div > button > span",
-    "shareButton": "#consentedAccounsBlock > div:nth-child(1) > div:nth-child(2) > div > button > span",
-    "confirmBlock": "#mat-dialog-0 > app-info-sharing-confirm-ui-dialog > app-info-sharing-confirm-component > div > div.isc-confirm-block",
-    "allowButton": "#flex > button.right.mediumDesktopBtn.mat-raised-button > span",
-    "transactionList": "table[class=striped]",
-    "UI_URL": "https://ui.sandbox.aggreg8.hu",
-    "editModeButton": "#mat-tab-content-0-0 > div > app-bank-access-consent-list-component > div > div.consent-list > div > div > div:nth-child(1) > div > mat-card > mat-card-content > div.subtitle > button > span > i",
-    "deleteAccessButton": "#mat-tab-content-0-0 > div > app-edit-bank-access-consent-component > div > div > button.right.mat-raised-button > span",
-    "revokeButton": "#revokeBtn > span"
+    "urls": {
+        "BASE_URL": "https://demoapp.sandbox.aggreg8.hu",
+        "login_url": "https://auth.sandbox.aggreg8.hu",
+        "UI_URL": "https://ui.sandbox.aggreg8.hu"
+    },
+    "selectors": {
+        "shareAccountButton": "#share-account-button",
+        "loginButton": "#kc_input_button",
+        "dropdown": "mat-select[role=listbox]",
+        "optionOTP": "#mat-option-7",
+        "connectButton": "body > sync-ui > app-control-component > div:nth-child(1) > div > non-aisp-oidc-control-component > div > app-connect-new-bank-component > div > div > div.bottomButtons > button > span",
+        "bankLoginButton": "body > sync-ui > app-control-component > div:nth-child(1) > div > non-aisp-oidc-control-component > div > app-enter-credentials-component > div > div > div > form > button > span",
+        "syncDone": "#sync-done-icon",
+        "continueButton": "body > sync-ui > app-control-component > div:nth-child(1) > div > non-aisp-oidc-control-component > div > app-sync-bank-access-consent-component > div > div > div > button",
+        "shareButton": "#consentedAccounsBlock > div > div:nth-child(2) > div > button > span",
+        "confirmBlock": "mat-dialog-container[role=dialog]",
+        "allowButton": "#mat-dialog-0 > app-info-sharing-confirm-ui-dialog > app-info-sharing-confirm-component > div > div.isc-confirm-block > div.isc-confirm-button-container.ng-star-inserted > button > span",
+        "transactionList": "table[class=striped]",
+        "editModeButton": "#mat-tab-content-0-0 > div > app-bank-access-consent-list-component > div > div.consent-list > div > div > div:nth-child(1) > div > mat-card > mat-card-content > div.subtitle > button > span > i",
+        "deleteAccessButton": "#mat-tab-content-0-0 > div > app-edit-bank-access-consent-component > div > div > button.right.mat-raised-button > span",
+        "revokeButton": "#revokeBtn > span"
+    },
+    "credentials": {
+        "username": "istvan.kadar.js@gmail.com",
+        "password": "asdf1234",
+        "accountNumber": "1103420034278",
+        "bankUserID": "3535419",
+        "bankPassword": "London12"
+    }
 }

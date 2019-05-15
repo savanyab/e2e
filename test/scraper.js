@@ -1,18 +1,22 @@
 const Nightmare = require('nightmare');
-const nightmare = Nightmare({
-  show: true,
-  waitTimeout: 600000
-})
 const expect = require('chai').expect;
 const config = require('../config');
+const selectors = require('../config').selectors;
+const urls = require('../config').urls;
+const credentials = require('../config').credentials;
 
 describe('e2e test', function () {
   this.timeout(30000);
 
+  const nightmare = Nightmare({
+    show: true,
+    waitTimeout: 300000
+  })
+
   it('should redirect to login page', function (done) {
     nightmare
-      .goto(config.BASE_URL)
-      .click(config.shareAccountButton)
+      .goto(config.urls.BASE_URL)
+      .click(config.selectors.shareAccountButton)
       .wait('#username')
       .evaluate(() => {
         const origin = document.location.origin;
@@ -26,7 +30,7 @@ describe('e2e test', function () {
       })
       .then((result) => {
         console.log(result);
-        expect(result[0]).to.equal(config.login_url);
+        expect(result[0]).to.equal(config.urls.login_url);
         expect(result[1]).to.equal('/auth/realms/aggreg8/protocol/openid-connect/auth');
         //expect(result).to.have.property('emailInputId', 'username');
         done();
@@ -36,9 +40,9 @@ describe('e2e test', function () {
 
   it('should enter correct credentials', function (done) {
     nightmare
-      .type('#username', config.username)
-      .type('#password', config.password)
-      .click(config.loginButton)
+      .type('#username', config.credentials.username)
+      .type('#password', config.credentials.password)
+      .click(config.selectors.loginButton)
       .evaluate(() => {
         const usernameText = document.querySelector('#username').value;
         const passwordText = document.querySelector('#password').value;
@@ -46,19 +50,19 @@ describe('e2e test', function () {
       })
       .then(result => {
         console.log(result);
-        expect(result[0]).to.equal(config.username);
-        expect(result[1]).to.equal(config.password);
+        expect(result[0]).to.equal(config.credentials.username);
+        expect(result[1]).to.equal(config.credentials.password);
         done()
       }).catch((err) => done(err))
   })
 
   it('should choose OTP bank', function (done) {
     nightmare
-      .wait(config.dropdown)
-      .click(config.dropdown)
-      .click(config.optionOTP)
+      .wait(config.selectors.dropdown)
+      .click(config.selectors.dropdown)
+      .click(config.selectors.optionOTP)
       .wait()
-      .click(config.connectButton)
+      .click(config.selectors.connectButton)
       .wait()
       .evaluate(() => {
         const otpAccountNumber = document.querySelector('#flex > div').innerText;
@@ -74,9 +78,9 @@ describe('e2e test', function () {
 
   it('should enter correct netbank login credentials', function (done) {
     nightmare
-      .type('#mainAccountNumber', config.accountNumber)
-      .type('#username', config.bankUserID)
-      .type('#password', config.bankPassword)
+      .type('#mainAccountNumber', config.credentials.accountNumber)
+      .type('#username', config.credentials.bankUserID)
+      .type('#password', config.credentials.bankPassword)
       .wait(2000)
       .evaluate(() => {
         const otpAccountNumber = document.querySelector('#mainAccountNumber').value;
@@ -102,10 +106,11 @@ describe('e2e test', function () {
     this.timeout(600000);
 
     nightmare
-      .click(config.bankLoginButton)
-      .wait(config.syncDone)
-      .click(config.continueButton)
+      .click(config.selectors.bankLoginButton)
+      .wait(config.selectors.syncDone)
+      .click(config.selectors.continueButton)
       .wait('#consentedAccounsBlock')
+      .wait(3000)
       .evaluate(() => {
         const elem = document.querySelector('#consentedAccounsBlock');
         return elem;
@@ -120,10 +125,11 @@ describe('e2e test', function () {
 
   it('should allow to share chosen account', function (done) {
     nightmare
-      .wait(3000)
-      .click(config.shareButton)
-      .wait(config.confirmBlock)
-      .click(config.allowButton)
+      .wait(2000)
+      .click(config.selectors.shareButton)
+      .wait(2000)
+      .wait(config.selectors.confirmBlock)
+      .click(config.selectors.allowButton)
       .wait("table[class=striped]")
       .evaluate(() => {
         const transactionList = document.getElementsByClassName('.transaction-list');
@@ -133,12 +139,12 @@ describe('e2e test', function () {
         expect(result).to.not.be.null;
         done();
       })
-      .catch((err) => done(err));
+      .catch((err) => { console.log(err); done(err) });
   });
 
   it('should contain transactions', function (done) {
     nightmare
-      .wait(config.transactionList)
+      .wait(config.selectors.transactionList)
       .evaluate(() => {
         const row = document.getElementsByTagName('TBODY')[0];
         return row.children.length;
@@ -153,11 +159,11 @@ describe('e2e test', function () {
 
   it('should log in to ui sandbox', function (done) {
     nightmare
-      .goto(config.UI_URL)
+      .goto(config.urls.UI_URL)
       .wait('#username')
-      .type('#username', config.username)
-      .type('#password', config.password)
-      .click(config.loginButton)
+      .type('#username', config.credentials.username)
+      .type('#password', config.credentials.password)
+      .click(config.selectors.loginButton)
       .wait('#mat-tab-content-0-0 > div > app-bank-access-consent-list-component > div > div.consent-list')
       .evaluate(() => {
         const consentList = document.querySelector('#mat-tab-content-0-0 > div > app-bank-access-consent-list-component > div > div.consent-list');
@@ -172,16 +178,17 @@ describe('e2e test', function () {
   })
 
   // error: config is not defined...??
+
   it('should delete account', function (done) {
     nightmare
-      .click(config.editModeButton)
-      .wait(config.deleteAccessButton)
-      .click(config.deleteAccessButton)
+      .click('#mat-tab-content-0-0 > div > app-bank-access-consent-list-component > div > div.consent-list > div > div > div:nth-child(1) > div > mat-card > mat-card-content > div.subtitle > button > span > i')
+      .wait('#mat-tab-content-0-0 > div > app-edit-bank-access-consent-component > div > div > button.right.mat-raised-button > span')
+      .click('#mat-tab-content-0-0 > div > app-edit-bank-access-consent-component > div > div > button.right.mat-raised-button > span')
       .wait(2000)
-      .click(config.revokeButton)
+      .click('#revokeBtn > span')
       .wait(3000)
       .evaluate(() => {
-        const editIcon = document.querySelector(config.editModeButton);
+        const editIcon = document.querySelector('#mat-tab-content-0-0 > div > app-bank-access-consent-list-component > div > div.consent-list > div > div > div:nth-child(1) > div > mat-card > mat-card-content > div.subtitle > button > span > i');
         return editIcon;
       })
       .end()
