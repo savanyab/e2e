@@ -1,5 +1,6 @@
 const { Given, When, Then } = require('cucumber');
 const expect = require('chai').expect;
+const AfterAll = require('cucumber').AfterAll;
 const Nightmare = require('nightmare');
 const nightmare = Nightmare({
   show: true,
@@ -79,6 +80,7 @@ When('he chooses his account to sync', { timeout: 300 * 1000 }, (done) => {
 
 When('he allows to share account', (done) => {
   nightmare
+    .wait(1000)
     .click(config.selectors.shareButton)
     .wait(config.selectors.confirmBlock)
     .click(config.selectors.allowButton)
@@ -103,7 +105,6 @@ Then('he should see the list of transactions', (done) => {
       const table = document.getElementsByTagName('TBODY')[0];
       return table.children.length;
     })
-    .end()
     .then(result => {
       console.log(result);
       expect(result).to.be.above(0);
@@ -111,39 +112,69 @@ Then('he should see the list of transactions', (done) => {
     })
     .catch((err) => done(err));
 });
-/*
+
 
 Given('user is on demo app\'s login page', function (done) {
   nightmare
-    .goto('https://ui.sandbox.aggreg8.hu')
-    .wait(2000)
+    .goto(config.urls.UI_URL)
+    .wait(3000)
+    .wait('#username')
     .evaluate(() => {
-      const usernameInput = document.getElementById('#username');
-      const passwordInput = document.getElementById('#password');
-      const loginButton = document.getElementById('#kc_input_button');
-      return usernameInput;
+      const usernameInput = document.querySelector('#username');
+      return usernameInput.id   
     })
     .then((result) => {
-      expect(result).to.exist;
-      //expect(result[1]).to.exist;
-      //expect(result[2]).to.exist;
+      expect(result).to.equal('username');
+      done();
+    })
+    .catch((err) => { done(err) });
+});
+
+When('he chooses to edit permissions of account', function (done) {
+  nightmare
+    .wait(config.selectors.editModeButton)
+    .click(config.selectors.editModeButton)
+    .wait(config.selectors.deleteAcessButton)
+    .evaluate(() => {
+      const deleteButton = document.querySelector('#mat-tab-content-0-0 > div > app-edit-bank-access-consent-component > div > div > button.right.mat-raised-button > span')
+      return deleteButton;
+    })
+    .then((result) => {
+      console.log("deletebutton: " + result);
+      expect(result).to.not.be.null;
       done();
     })
     .catch((err) => done(err));
 });
 
-When('he chooses to edit permissions of account', function () {
-  // Write code here that turns the phrase above into concrete actions
-  return 'pending';
+When('he chooses to revoke permission', function (done) {
+  nightmare
+    .wait(2000)
+    .click(config.selectors.revokeButton)
+    .wait(3000)
+    .evaluate(() => {
+      const revokeButton = document.querySelector('#revokeBtn > span');
+      return revokeButton;
+    })
+    .end()
+    .then((result) => {
+      expect(result).to.be.null;
+      done();
+    })
+    .catch((err) => done(err));
+
 });
 
-When('he chooses to revoke permission', function () {
-  // Write code here that turns the phrase above into concrete actions
-  return 'pending';
+Then('the account should not be available', function (done) {
+  nightmare
+    .evaluate(() => {
+      const dropdown = document.querySelector('mat-select[role=listbox]');
+      return dropdown;
+    })
+    .then((result) => {
+      console.log(result);
+      expect(result).to.not.be.null;
+      done();
+    })
+    .catch((err) => done(err));
 });
-
-Then('the account should not be available', function () {
-  // Write code here that turns the phrase above into concrete actions
-  return 'pending';
-});
-*/

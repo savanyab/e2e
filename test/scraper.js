@@ -1,12 +1,16 @@
 const Nightmare = require('nightmare');
 const expect = require('chai').expect;
 const config = require('../config');
-const selectors = require('../config').selectors;
-const urls = require('../config').urls;
-const credentials = require('../config').credentials;
+
 
 describe('e2e test', function () {
   this.timeout(30000);
+
+  after(function(done) {
+    nightmare.end().then(function () {
+      done();
+    });
+  });
 
   const nightmare = Nightmare({
     show: true,
@@ -21,18 +25,12 @@ describe('e2e test', function () {
       .evaluate(() => {
         const origin = document.location.origin;
         const pathname = document.location.pathname;
-        return [origin, pathname];/*{
-          emailInputId: emailInput.id,
-          passwordInputId: passwordInput.id,
-          loginButtonId: loginButton.id
-        };*/
-
+        return [origin, pathname];
       })
       .then((result) => {
         console.log(result);
         expect(result[0]).to.equal(config.urls.login_url);
         expect(result[1]).to.equal('/auth/realms/aggreg8/protocol/openid-connect/auth');
-        //expect(result).to.have.property('emailInputId', 'username');
         done();
       }).catch((err) => done(err))
 
@@ -52,7 +50,7 @@ describe('e2e test', function () {
         console.log(result);
         expect(result[0]).to.equal(config.credentials.username);
         expect(result[1]).to.equal(config.credentials.password);
-        done()
+        done();
       }).catch((err) => done(err))
   })
 
@@ -110,7 +108,7 @@ describe('e2e test', function () {
       .wait(config.selectors.syncDone)
       .click(config.selectors.continueButton)
       .wait('#consentedAccounsBlock')
-      .wait(3000)
+      .wait(2000)
       .evaluate(() => {
         const elem = document.querySelector('#consentedAccounsBlock');
         return elem;
@@ -125,7 +123,7 @@ describe('e2e test', function () {
 
   it('should allow to share chosen account', function (done) {
     nightmare
-      .wait(2000)
+      .wait(1000)
       .click(config.selectors.shareButton)
       .wait(2000)
       .wait(config.selectors.confirmBlock)
@@ -191,7 +189,7 @@ describe('e2e test', function () {
         const editIcon = document.querySelector('#mat-tab-content-0-0 > div > app-bank-access-consent-list-component > div > div.consent-list > div > div > div:nth-child(1) > div > mat-card > mat-card-content > div.subtitle > button > span > i');
         return editIcon;
       })
-      .end()
+      //.end()
       .then(result => {
         console.log(result)
         expect(result).to.be.null;
