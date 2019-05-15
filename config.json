@@ -19,7 +19,7 @@
         "transactionList": "table[class=striped]",
         "editModeButton": "#mat-tab-content-0-0 > div > app-bank-access-consent-list-component > div > div.consent-list > div > div > div:nth-child(1) > div > mat-card > mat-card-content > div.subtitle > button > span > i",
         "deleteAccessButton": "#mat-tab-content-0-0 > div > app-edit-bank-access-consent-component > div > div > button.right.mat-raised-button > span",
-        "revokeButton": "#revokeBtn > span"
+        "revokeButton": "#revokeBtn"
     },
     "credentials": {
         "username": "istvan.kadar.js@gmail.com",

@@ -11,6 +11,12 @@ const { setDefaultTimeout } = require('cucumber');
 
 setDefaultTimeout(600 * 1000);
 
+AfterAll((done) => {
+  nightmare.end()
+  .then(done())
+  .catch((err) => done(err));
+});
+
 When('user starts the demo app', (done) => {
   nightmare
     .goto(config.urls.BASE_URL)
@@ -78,20 +84,20 @@ When('he chooses his account to sync', { timeout: 300 * 1000 }, (done) => {
 
 When('he chooses his account to share', (done) => {
   nightmare
-    .evaluate(()=> {
+    .evaluate(() => {
       const checked = document.getElementsByTagName("INPUT")[2].getAttribute("aria-checked");
       return checked;
     })
-    .then((result)=> {
-        console.log(result);        
-        if (result == 'true') { 
-          done();
-        } else {
-          nightmare.click("input[type=checkbox]");
-          done();
-        }
+    .then((result) => {
+      console.log(result);
+      if (result == 'true') {
+        done();
+      } else {
+        nightmare.click("input[type=checkbox]");
+        done();
+      }
     })
-    .catch((err) => {console.log(err); done(err);})
+    .catch((err) => { console.log(err); done(err); })
 })
 
 
@@ -139,7 +145,7 @@ Given('user is on demo app\'s login page', function (done) {
     .wait('#username')
     .evaluate(() => {
       const usernameInput = document.querySelector('#username');
-      return usernameInput.id   
+      return usernameInput.id
     })
     .then((result) => {
       expect(result).to.equal('username');
@@ -167,16 +173,10 @@ When('he chooses to edit permissions of account', function (done) {
 
 When('he chooses to revoke permission', function (done) {
   nightmare
-    .wait(2000)
+    .click(config.selectors.deleteAccessButton)
+    .wait(config.selectors.revokeButton)
     .click(config.selectors.revokeButton)
-    .wait(3000)
-    .evaluate(() => {
-      const revokeButton = document.querySelector('#revokeBtn > span');
-      return revokeButton;
-    })
-    .end()
-    .then((result) => {
-      expect(result).to.be.null;
+    .then(() => {
       done();
     })
     .catch((err) => done(err));
@@ -185,12 +185,12 @@ When('he chooses to revoke permission', function (done) {
 
 Then('the account should not be available', function (done) {
   nightmare
+    .wait(config.selectors.dropdown)
     .evaluate(() => {
       const dropdown = document.querySelector('mat-select[role=listbox]');
       return dropdown;
     })
     .then((result) => {
-      console.log(result);
       expect(result).to.not.be.null;
       done();
     })
