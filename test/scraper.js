@@ -4,7 +4,7 @@ const config = require('../config');
 
 
 describe('e2e test', function () {
-  this.timeout(30000);
+  this.timeout(600000);
 
   after(function (done) {
     nightmare.end().then(function () {
