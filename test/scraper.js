@@ -14,7 +14,7 @@ describe('e2e test', function () {
 
   const nightmare = Nightmare({
     show: true,
-    waitTimeout: 300000
+    waitTimeout: 600000
   });
 
   it('should redirect to login page', function (done) {
