@@ -199,16 +199,15 @@ describe('e2e test', function () {
       .click(config.selectors.editModeButton)
       .wait(config.selectors.deleteAccessButton)
       .click(config.selectors.deleteAccessButton)
-      .wait(2000)
+      .wait(config.selectors.revokeButton)
       .click(config.selectors.revokeButton)
-      .wait(3000)
+      .wait(config.selectors.dropdown)
       .evaluate(() => {
-        const editIcon = document.querySelector('#mat-tab-content-0-0 > div > app-bank-access-consent-list-component > div > div.consent-list > div > div > div:nth-child(1) > div > mat-card > mat-card-content > div.subtitle > button > span > i');
-        return editIcon;
+        const dropdown = document.querySelector('mat-select[role=listbox]');
+        return dropdown;
       })
       .then(result => {
-        console.log(result)
-        expect(result).to.be.null;
+        expect(result).to.not.be.null;
         done();
       })
       .catch((err) => {
