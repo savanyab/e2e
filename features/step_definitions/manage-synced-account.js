@@ -1,6 +1,5 @@
-const { Given, When, Then } = require('cucumber');
+const { Given, When, Then, AfterAll } = require('cucumber');
 const expect = require('chai').expect;
-const AfterAll = require('cucumber').AfterAll;
 const Nightmare = require('nightmare');
 const nightmare = Nightmare({
   show: true,
