@@ -2,21 +2,27 @@
     "urls": {
         "BASE_URL": "https://demoapp.sandbox.aggreg8.hu",
         "login_url": "https://auth.sandbox.aggreg8.hu",
-        "UI_URL": "https://ui.sandbox.aggreg8.hu"
+        "UI_URL": "https://ui.sandbox.aggreg8.hu",
+        "login_path": "/auth/realms/aggreg8/protocol/openid-connect/auth"
     },
     "selectors": {
         "shareAccountButton": "#share-account-button",
         "loginButton": "#kc_input_button",
+        "usernameInput" : "#username",
+        "passwordInput": "#password",
         "dropdown": "mat-select[role=listbox]",
         "optionOTP": "#mat-option-7",
         "connectButton": "body > sync-ui > app-control-component > div:nth-child(1) > div > non-aisp-oidc-control-component > div > app-connect-new-bank-component > div > div > div.bottomButtons > button > span",
         "bankLoginButton": "body > sync-ui > app-control-component > div:nth-child(1) > div > non-aisp-oidc-control-component > div > app-enter-credentials-component > div > div > div > form > button > span",
+        "mainAccountNumber": "#mainAccountNumber",
         "syncDone": "#sync-done-icon",
         "continueButton": "body > sync-ui > app-control-component > div:nth-child(1) > div > non-aisp-oidc-control-component > div > app-sync-bank-access-consent-component > div > div > div > button",
+        "consentedAccountsBlock": "#consentedAccounsBlock",
         "shareButton": "#consentedAccounsBlock > div > div:nth-child(2) > div > button > span",
         "confirmBlock": "mat-dialog-container[role=dialog]",
         "allowButton": "#mat-dialog-0 > app-info-sharing-confirm-ui-dialog > app-info-sharing-confirm-component > div > div.isc-confirm-block > div.isc-confirm-button-container.ng-star-inserted > button > span",
         "transactionList": "table[class=striped]",
+        "consentList": "#mat-tab-content-0-0 > div > app-bank-access-consent-list-component > div > div.consent-list",
         "editModeButton": "#mat-tab-content-0-0 > div > app-bank-access-consent-list-component > div > div.consent-list > div > div > div:nth-child(1) > div > mat-card > mat-card-content > div.subtitle > button > span > i",
         "deleteAccessButton": "#mat-tab-content-0-0 > div > app-edit-bank-access-consent-component > div > div > button.right.mat-raised-button > span",
         "revokeButton": "#revokeBtn"

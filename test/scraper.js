@@ -21,7 +21,7 @@ describe('e2e test', function () {
     nightmare
       .goto(config.urls.BASE_URL)
       .click(config.selectors.shareAccountButton)
-      .wait('#username')
+      .wait(config.selectors.usernameInput)
       .evaluate(() => {
         const origin = document.location.origin;
         const pathname = document.location.pathname;
@@ -30,7 +30,7 @@ describe('e2e test', function () {
       .then((result) => {
         console.log(result);
         expect(result[0]).to.equal(config.urls.login_url);
-        expect(result[1]).to.equal('/auth/realms/aggreg8/protocol/openid-connect/auth');
+        expect(result[1]).to.equal(config.urls.login_path);
         done();
       }).catch((err) => done(err))
 
@@ -38,8 +38,8 @@ describe('e2e test', function () {
 
   it('should enter correct credentials', function (done) {
     nightmare
-      .type('#username', config.credentials.username)
-      .type('#password', config.credentials.password)
+      .type(config.selectors.usernameInput, config.credentials.username)
+      .type(config.selectors.passwordInput, config.credentials.password)
       .click(config.selectors.loginButton)
       .evaluate(() => {
         const usernameText = document.querySelector('#username').value;
@@ -76,10 +76,10 @@ describe('e2e test', function () {
 
   it('should enter correct netbank login credentials', function (done) {
     nightmare
-      .type('#mainAccountNumber', config.credentials.accountNumber)
-      .type('#username', config.credentials.bankUserID)
-      .type('#password', config.credentials.bankPassword)
-      .wait(2000)
+      .type(config.selectors.mainAccountNumber, config.credentials.accountNumber)
+      .type(config.selectors.usernameInput, config.credentials.bankUserID)
+      .type(config.selectors.passwordInput, config.credentials.bankPassword)
+      //.wait(2000)
       .evaluate(() => {
         const otpAccountNumber = document.querySelector('#mainAccountNumber').value;
         const otpUsername = document.querySelector('#username').value;
@@ -88,9 +88,9 @@ describe('e2e test', function () {
       })
       .then(result => {
         console.log(result);
-        expect(result[0]).to.equal('1103420034278');
-        expect(result[1]).to.equal('3535419');
-        expect(result[2]).to.equal('London12');
+        expect(result[0]).to.equal(config.credentials.accountNumber);
+        expect(result[1]).to.equal(config.credentials.bankUserID);
+        expect(result[2]).to.equal(config.credentials.bankPassword);
         done();
       })
       .catch((err) => {
@@ -107,8 +107,8 @@ describe('e2e test', function () {
       .click(config.selectors.bankLoginButton)
       .wait(config.selectors.syncDone)
       .click(config.selectors.continueButton)
-      .wait('#consentedAccounsBlock')
-      .wait(2000)
+      .wait(config.selectors.consentedAccountsBlock)
+      .wait(3000)
       .evaluate(() => {
         const elem = document.querySelector('#consentedAccounsBlock');
         return elem;
@@ -132,7 +132,7 @@ describe('e2e test', function () {
         if (result == 'true') { 
           done();
         } else {
-          nightmare.click("input[type=checkbox]");
+          nightmare.click("input[type=checkbox]").wait(1000);
           done();
         }
     })
@@ -146,7 +146,7 @@ describe('e2e test', function () {
       .wait(2000)
       .wait(config.selectors.confirmBlock)
       .click(config.selectors.allowButton)
-      .wait("table[class=striped]")
+      .wait(config.selectors.transactionList)
       .evaluate(() => {
         const transactionList = document.getElementsByClassName('.transaction-list');
         return transactionList;
@@ -176,11 +176,11 @@ describe('e2e test', function () {
   it('should log in to ui sandbox', function (done) {
     nightmare
       .goto(config.urls.UI_URL)
-      .wait('#username')
-      .type('#username', config.credentials.username)
-      .type('#password', config.credentials.password)
+      .wait(config.selectors.usernameInput)
+      .type(config.selectors.usernameInput, config.credentials.username)
+      .type(config.selectors.passwordInput, config.credentials.password)
       .click(config.selectors.loginButton)
-      .wait('#mat-tab-content-0-0 > div > app-bank-access-consent-list-component > div > div.consent-list')
+      .wait(config.selectors.consentList)
       .evaluate(() => {
         const consentList = document.querySelector('#mat-tab-content-0-0 > div > app-bank-access-consent-list-component > div > div.consent-list');
         return consentList;

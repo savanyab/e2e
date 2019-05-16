@@ -21,7 +21,7 @@ When('user starts the demo app', (done) => {
   nightmare
     .goto(config.urls.BASE_URL)
     .click(config.selectors.shareAccountButton)
-    .wait('#username')
+    .wait(config.selectors.usernameInput)
     .evaluate(() => {
       const origin = document.location.origin;
       const pathname = document.location.pathname;
@@ -29,7 +29,7 @@ When('user starts the demo app', (done) => {
     })
     .then((result) => {
       expect(result[0]).to.equal(config.urls.login_url);
-      expect(result[1]).to.equal('/auth/realms/aggreg8/protocol/openid-connect/auth');
+      expect(result[1]).to.equal(config.urls.login_path);
       done();
     }).catch((err) => done(err));
 });
@@ -37,8 +37,8 @@ When('user starts the demo app', (done) => {
 
 When('he logs in with valid credentials', (done) => {
   nightmare
-    .type('#username', config.credentials.username)
-    .type('#password', config.credentials.password)
+    .type(config.selectors.usernameInput, config.credentials.username)
+    .type(config.selectors.passwordInput, config.credentials.password)
     .click(config.selectors.loginButton)
     .wait(3000)
     .evaluate(() => {
@@ -62,13 +62,13 @@ When('he chooses his account to sync', { timeout: 300 * 1000 }, (done) => {
     .wait()
     .click(config.selectors.connectButton)
     .wait()
-    .type('#mainAccountNumber', config.credentials.accountNumber)
-    .type('#username', config.credentials.bankUserID)
-    .type('#password', config.credentials.bankPassword)
+    .type(config.selectors.mainAccountNumber, config.credentials.accountNumber)
+    .type(config.selectors.usernameInput, config.credentials.bankUserID)
+    .type(config.selectors.passwordInput, config.credentials.bankPassword)
     .click(config.selectors.bankLoginButton)
     .wait(config.selectors.syncDone)
     .click(config.selectors.continueButton)
-    .wait("#consentedAccounsBlock")
+    .wait(config.selectors.consentedAccountsBlock)
     .wait(3000)
     .evaluate(() => {
       const elem = document.querySelector('#consentedAccounsBlock');
@@ -93,11 +93,11 @@ When('he chooses his account to share', (done) => {
       if (result == 'true') {
         done();
       } else {
-        nightmare.click("input[type=checkbox]");
+        nightmare.click("input[type=checkbox]").wait(1000);
         done();
       }
     })
-    .catch((err) => { console.log(err); done(err); })
+    .catch((err) => done(err))
 })
 
 
@@ -142,7 +142,7 @@ Given('user is on demo app\'s login page', function (done) {
   nightmare
     .goto(config.urls.UI_URL)
     .wait(3000)
-    .wait('#username')
+    .wait(config.selectors.username)
     .evaluate(() => {
       const usernameInput = document.querySelector('#username');
       return usernameInput.id
@@ -151,7 +151,7 @@ Given('user is on demo app\'s login page', function (done) {
       expect(result).to.equal('username');
       done();
     })
-    .catch((err) => { done(err) });
+    .catch((err) => done(err));
 });
 
 When('he chooses to edit permissions of account', function (done) {
