@@ -15,7 +15,7 @@ describe('e2e test', function () {
   const nightmare = Nightmare({
     show: true,
     waitTimeout: 300000
-  })
+  });
 
   it('should redirect to login page', function (done) {
     nightmare
@@ -193,8 +193,6 @@ describe('e2e test', function () {
       .catch((err) => done(err));
   })
 
-  // error: config is not defined...??
-
   it('should delete account', function (done) {
     nightmare
       .wait(config.selectors.editModeButton)
@@ -208,7 +206,6 @@ describe('e2e test', function () {
         const editIcon = document.querySelector('#mat-tab-content-0-0 > div > app-bank-access-consent-list-component > div > div.consent-list > div > div > div:nth-child(1) > div > mat-card > mat-card-content > div.subtitle > button > span > i');
         return editIcon;
       })
-      //.end()
       .then(result => {
         console.log(result)
         expect(result).to.be.null;
